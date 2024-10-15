@@ -89,7 +89,7 @@ python lerobot/scripts/train.py \
 
 or  
 python lerobot/scripts/train.py \
-    hydra.run.dir=outputs/train/act_aloha_task1_c30 \
+    hydra.run.dir=outputs/train/pusht_c10 \
     resume=true
 
 huggingface token = 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

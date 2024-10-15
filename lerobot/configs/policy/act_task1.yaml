@@ -45,11 +45,11 @@ training:
   offline_steps: 800000
   online_steps: 0
   eval_freq: -1
-  save_freq: 5000
+  save_freq: 100
   log_freq: 100
   save_checkpoint: true
 
-  batch_size: 12
+  batch_size: 1
   lr: 1e-5
   lr_backbone: 1e-5
   weight_decay: 1e-4
