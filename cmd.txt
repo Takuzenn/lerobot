@@ -1,0 +1,96 @@
+export PYTHONPATH=$PYTHONPATH:/home/takuzen/aloha/lerobot
+
+python lerobot/scripts/push_dataset_to_hub.py  \
+    --raw-dir ../task_1_sim   --local-dir ../task_1_lerobot   \
+    --raw-format aloha_hdf5   --fps 10  \
+    --repo-id takuzennn/task1_v0 \
+    --force-override 1
+
+python lerobot/scripts/push_dataset_to_hub.py    
+    --raw-dir ../pusht_data_sim   \ 
+    --local-dir ../pusht_data_lerobot  \
+    --raw-format aloha_hdf5   --fps 10  \
+    --repo-id takuzennn/pusht_v0     --force-override 1
+
+python lerobot/scripts/train.py \
+    hydra.run.dir=outputs/train/act_aloha_task1\
+    device=cuda
+    env=pusht_act \
+    env.task=AlohaMoving-v0 \
+    dataset_repo_id= takuzennn/task1_v0 \
+    policy=act \
+    training.eval_freq=2000 \
+    training.log_freq=250 \
+    training.offline_steps=300000 \
+    training.save_model=true \
+    training.save_freq=2000 \
+    eval.n_episodes=30 \
+    eval.batch_size=8 \
+    wandb.enable=false \
+
+python lerobot/scripts/train.py \
+    hydra.run.dir=outputs/train/pusht_c30 \
+    device=cuda
+    env=pusht_act \
+    env.task=pusht-v1 \
+    dataset_repo_id= takuzennn/pusht_v0 \
+    policy=act_pusht \
+    training.eval_freq=2000 \
+    training.log_freq=250 \
+    training.offline_steps=800000 \
+    training.save_model=true \
+    training.save_freq=10000 \
+    eval.n_episodes=30 \
+    eval.batch_size=12 \
+    wandb.enable=true \
+
+python lerobot/scripts/train.py \
+  hydra.run.dir=outputs/train/pusht_c30 \
+  hydra.job.name=diffusion_pusht \
+  policy=diffusion 
+  training.save_model=true \
+  env=pusht \
+  env.task=PushT-v0 \
+  dataset_repo_id=lerobot/pusht_v0 \
+  training.offline_steps=800000 \
+  training.save_freq=10000 \
+  training.eval_freq=10000 \
+  eval.n_episodes=50 \
+  wandb.enable=true \
+  wandb.disable_artifact=true \
+  device=cuda
+
+python lerobot/scripts/train.py \
+    hydra.run.dir=outputs/train/act_aloha_task1_c30\
+    device=cuda
+    env=aloha_task1 \
+    env.task=AlohaMoving-v0 \
+    dataset_repo_id= takuzennn/d3_t2 \
+    policy=act_task1 \
+    training.eval_freq=2000 \
+    training.log_freq=250 \
+    training.offline_steps=800000 \
+    training.save_model=true \
+    training.save_freq=100 \
+    eval.n_episodes=30 \
+    eval.batch_size=8 \
+    wandb.enable=true \
+
+resume training:
+python lerobot/scripts/train.py \
+    hydra.run.dir=outputs/train/run_resumption \
+    policy=act \
+    dataset_repo_id=lerobot/aloha_sim_transfer_cube_human \
+    env=aloha \
+    env.task=AlohaTransferCube-v0 \
+    training.log_freq=25 \
+    training.save_checkpoint=true \
+    training.save_freq=100
+
+or  
+python lerobot/scripts/train.py \
+    hydra.run.dir=outputs/train/act_aloha_task1_c30 \
+    resume=true
+
+huggingface token = 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
+aloha2 token = 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

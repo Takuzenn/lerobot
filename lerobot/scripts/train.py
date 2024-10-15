@@ -49,6 +49,11 @@ from lerobot.common.utils.utils import (
     set_global_seed,
 )
 from lerobot.scripts.eval import eval_policy
+from huggingface_hub import login, HfApi
+
+# 在训练开始时进行 Hugging Face 登录
+login(token="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")
+api = HfApi()
 
 
 def make_optimizer_and_scheduler(cfg, policy):
@@ -380,16 +385,31 @@ def train(cfg: DictConfig, out_dir: str | None = None, job_name: str | None = No
             step % cfg.training.save_freq == 0
             or step == cfg.training.offline_steps + cfg.training.online_steps
         ):
-            logging.info(f"Checkpoint policy after step {step}")
-            # Note: Save with step as the identifier, and format it to have at least 6 digits but more if
-            # needed (choose 6 as a minimum for consistency without being overkill).
-            logger.save_checkpont(
-                step,
-                policy,
-                optimizer,
-                lr_scheduler,
-                identifier=step_identifier,
+            # logging.info(f"Checkpoint policy after step {step}")
+            # # Note: Save with step as the identifier, and format it to have at least 6 digits but more if
+            # # needed (choose 6 as a minimum for consistency without being overkill).
+            # logger.save_checkpont(
+            #     step,
+            #     policy,
+            #     optimizer,
+            #     lr_scheduler,
+            #     identifier=step_identifier,
+            # )
+            # logging.info("Resume training")
+                    # 保存检查点
+            # 保存 PyTorch 模型
+            model_save_path = f"model_step_{step_identifier}.pth"
+            torch.save(policy.state_dict(), model_save_path)
+
+            # 上传到 Hugging Face
+            repo_id = "takuzennn/task1"  # 替换为你的 Hugging Face 仓库ID
+            api.upload_folder(
+                folder_path=model_save_path,  # 上传保存的模型文件夹
+                repo_id=repo_id,
+                repo_type="model"  # 如果是模型，可以保持这个为 'model'
             )
+            logging.info(f"Model uploaded to Hugging Face at step {step}")
+
             logging.info("Resume training")
 
     # create dataloader for offline training

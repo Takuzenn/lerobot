@@ -1,7 +1,7 @@
 defaults:
   - _self_
-  - env: pusht
-  - policy: diffusion
+  - env: aloha_task1
+  - policy: act_task1
 
 hydra:
   run:
@@ -27,7 +27,7 @@ seed: ???
 # keys common between the datasets are kept. Each dataset gets and additional transform that inserts the
 # "dataset_index" into the returned item. The index mapping is made according to the order in which the
 # datsets are provided.
-dataset_repo_id: lerobot/pusht
+dataset_repo_id: takuzennn/d3_t2
 video_backend: pyav
 
 training:
@@ -123,7 +123,7 @@ eval:
   use_async_envs: false
 
 wandb:
-  enable: false
+  enable: true
   # Set to true to disable saving an artifact despite save_checkpoint == True
   disable_artifact: false
   project: lerobot
