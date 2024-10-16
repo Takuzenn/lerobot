@@ -49,8 +49,8 @@ training:
   log_freq: 100
   save_checkpoint: true
 
-  batch_size: 1
-  lr: 1e-5
+  batch_size: 64
+  lr: 5e-5
   lr_backbone: 1e-5
   weight_decay: 1e-4
   grad_clip_norm: 10
