@@ -354,28 +354,27 @@ def train(cfg: DictConfig, out_dir: str | None = None, job_name: str | None = No
     logging.info(f"{num_learnable_params=} ({format_big_number(num_learnable_params)})")
     logging.info(f"{num_total_params=} ({format_big_number(num_total_params)})")
 
-
     # Note: this helper will be used in offline and online training loops.
     def evaluate_and_checkpoint_if_needed(step, is_online):
         _num_digits = max(6, len(str(cfg.training.offline_steps + cfg.training.online_steps)))
         step_identifier = f"{step:0{_num_digits}d}"
 
-        if cfg.training.eval_freq > 0 and step % cfg.training.eval_freq == 0:
-            logging.info(f"Eval policy at step {step}")
-            with torch.no_grad(), torch.autocast(device_type=device.type) if cfg.use_amp else nullcontext():
-                assert eval_env is not None
-                eval_info = eval_policy(
-                    eval_env,
-                    policy,
-                    cfg.eval.n_episodes,
-                    videos_dir=Path(out_dir) / "eval" / f"videos_step_{step_identifier}",
-                    max_episodes_rendered=4,
-                    start_seed=cfg.seed,
-                )
-            log_eval_info(logger, eval_info["aggregated"], step, cfg, offline_dataset, is_online=is_online)
-            if cfg.wandb.enable:
-                logger.log_video(eval_info["video_paths"][0], step, mode="eval")
-            logging.info("Resume training")
+        # if cfg.training.eval_freq > 0 and step % cfg.training.eval_freq == 0:
+        #     logging.info(f"Eval policy at step {step}")
+        #     with torch.no_grad(), torch.autocast(device_type=device.type) if cfg.use_amp else nullcontext():
+        #         assert eval_env is not None
+        #         eval_info = eval_policy(
+        #             eval_env,
+        #             policy,
+        #             cfg.eval.n_episodes,
+        #             videos_dir=Path(out_dir) / "eval" / f"videos_step_{step_identifier}",
+        #             max_episodes_rendered=4,
+        #             start_seed=cfg.seed,
+        #         )
+        #     log_eval_info(logger, eval_info["aggregated"], step, cfg, offline_dataset, is_online=is_online)
+        #     if cfg.wandb.enable:
+        #         logger.log_video(eval_info["video_paths"][0], step, mode="eval")
+        #     logging.info("Resume training")
 
         if cfg.training.save_checkpoint and (
             step % cfg.training.save_freq == 0

@@ -21,7 +21,7 @@
 # ```
 
 seed: 1000
-dataset_repo_id: takuzennn/d3_t2
+dataset_repo_id: takuzennn/d3_t3
 
 override_dataset_stats:
   observation.images.camera1:
