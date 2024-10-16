@@ -89,7 +89,7 @@ python lerobot/scripts/train.py \
 
 or  
 python lerobot/scripts/train.py \
-    hydra.run.dir=outputs/train/pusht_c10 \
+    hydra.run.dir=outputs/train/aloha_task1_v3 \
     resume=true
 
 huggingface token = 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
@@ -98,4 +98,6 @@ aloha2 token = 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
 lambda.cloud:
 scp -i ~/.ssh/takuzen.pem ~/Downloads/last2.zip ubuntu@129.146.24.2:~/.
 scp -i ~/.ssh/takuzen.pem ubuntu@129.146.24.2:~/results.ckpt ~/Downloads/lambda_cloud
+
+ssh -i ~/.ssh/takuzen.pem ubuntu@129.146.24.2
 

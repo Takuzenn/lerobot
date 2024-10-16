@@ -23,6 +23,7 @@ import os
 import re
 from glob import glob
 from pathlib import Path
+import shutil
 
 import torch
 from huggingface_hub.constants import SAFETENSORS_SINGLE_FILE
@@ -167,7 +168,12 @@ class Logger:
             artifact.add_file(save_dir / SAFETENSORS_SINGLE_FILE)
             self._wandb.log_artifact(artifact)
         if self.last_checkpoint_dir.exists():
-            os.remove(self.last_checkpoint_dir)
+            if os.path.islink(self.last_checkpoint_dir):
+                os.unlink(self.last_checkpoint_dir)
+            elif os.path.isdir(self.last_checkpoint_dir):
+                shutil.rmtree(self.last_checkpoint_dir)
+            elif os.path.isfile(self.last_checkpoint_dir):
+                os.remove(self.last_checkpoint_dir)
 
     def save_training_state(
         self,

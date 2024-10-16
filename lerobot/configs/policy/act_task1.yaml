@@ -45,12 +45,12 @@ training:
   offline_steps: 800000
   online_steps: 0
   eval_freq: -1
-  save_freq: 100
+  save_freq: 1000
   log_freq: 100
   save_checkpoint: true
 
-  batch_size: 64
-  lr: 5e-5
+  batch_size: 36
+  lr: 3e-5
   lr_backbone: 1e-5
   weight_decay: 1e-4
   grad_clip_norm: 10
@@ -69,8 +69,8 @@ policy:
 
   # Input / output structure.
   n_obs_steps: 1
-  chunk_size: 5
-  n_action_steps: 3
+  chunk_size: 10
+  n_action_steps: 5
 
   input_shapes:
     # TODO(rcadene, alexander-soare): add variables for height and width from the dataset/env?
