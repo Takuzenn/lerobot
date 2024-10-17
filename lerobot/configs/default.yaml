@@ -1,7 +1,7 @@
 defaults:
   - _self_
-  - env: aloha_task1
-  - policy: act_task1
+  - env: real_robot_J6
+  - policy: act_taskSplit
 
 hydra:
   run:
@@ -27,7 +27,7 @@ seed: ???
 # keys common between the datasets are kept. Each dataset gets and additional transform that inserts the
 # "dataset_index" into the returned item. The index mapping is made according to the order in which the
 # datsets are provided.
-dataset_repo_id: takuzennn/d3_t3
+dataset_repo_id: takuzennn/aloha_base
 video_backend: pyav
 
 training:
@@ -56,7 +56,7 @@ training:
   #         loss.backward()
   #         optimizer.step()
   #
-  online_steps: ???
+  online_steps: 0
   # How many episodes to collect at once when we reach the online rollout part of the training loop.
   online_rollout_n_episodes: 1
   # The number of environments to use in the gym.vector.VectorEnv. This ends up also being the batch size for
@@ -123,7 +123,7 @@ eval:
   use_async_envs: false
 
 wandb:
-  enable: false
+  enable: true
   # Set to true to disable saving an artifact despite save_checkpoint == True
   disable_artifact: false
   project: lerobot

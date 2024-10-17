@@ -45,19 +45,14 @@ python lerobot/scripts/train.py \
     wandb.enable=true \
 
 python lerobot/scripts/train.py \
-  hydra.run.dir=outputs/train/pusht_c30 \
-  hydra.job.name=diffusion_pusht \
-  policy=diffusion 
-  training.save_model=true \
-  env=pusht \
-  env.task=PushT-v0 \
-  dataset_repo_id=lerobot/pusht_v0 \
+  hydra.run.dir=outputs/train/pusht_v1_c10 \
+  policy=pusht_act \
+  env=pusht_act \
+  dataset_repo_id=lerobot/pusht_v1 \
   training.offline_steps=800000 \
-  training.save_freq=10000 \
-  training.eval_freq=10000 \
-  eval.n_episodes=50 \
+  training.online_steps=0 \
+  training.save_freq=1000 \
   wandb.enable=true \
-  wandb.disable_artifact=true \
   device=cuda
 
 python lerobot/scripts/train.py \
@@ -96,8 +91,8 @@ huggingface token = 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
 aloha2 token = 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
 
 lambda.cloud:
-scp -i ~/.ssh/takuzen.pem ~/Downloads/last2.zip ubuntu@129.146.24.2:~/.
-scp -i ~/.ssh/takuzen.pem ubuntu@129.146.24.2:~/results.ckpt ~/Downloads/lambda_cloud
+scp -i ~/.ssh/takuzen.pem ~/Downloads/last.zip ubuntu@129.146.60.62:~/.
+scp -i ~/.ssh/takuzen.pem ubuntu@129.146.60.62:~/takuzen/lerobot/outputs/train/act_task1_v3/checkpoints/0120000 ~/Downloads/lambda_cloud
 
-ssh -i ~/.ssh/takuzen.pem ubuntu@129.146.24.2
+ssh -i ~/.ssh/takuzen.pem ubuntu@129.146.60.62
 
